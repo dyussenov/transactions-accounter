@@ -33,6 +33,10 @@ class OperationForm(forms.ModelForm):
 
 
 class RevenueForm(OperationForm):
+    type = forms.CharField(
+        widget=forms.HiddenInput(),
+        initial='Реализация'
+    )
 
     def __init__(self, *args, **kwargs):
         super(RevenueForm, self).__init__(*args, **kwargs)
@@ -41,7 +45,7 @@ class RevenueForm(OperationForm):
 
     class Meta(OperationForm.Meta):
         model = Operation
-        exclude = OperationForm.Meta.exclude + ['type', 'customer', ]
+        exclude = OperationForm.Meta.exclude + ['customer', ]
 
 
 class SaleForm(OperationForm):

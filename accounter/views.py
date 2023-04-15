@@ -41,17 +41,21 @@ def suppliers(request):
 
 
 def transactions(request):
-    if request.method == 'POST':
-        form = SaleForm(request.POST)
-        print(form.__dict__)
-        if form.is_valid():
-            print(1488)
-            form.save()
-            return redirect('transactions')
-
     context = {
         'revenue_from': RevenueForm,
         'sale_from': SaleForm,
         'suppliers': Operation.objects.all()
     }
     return render(request, 'accounter/operations.html', context)
+
+
+def add_transaction(request, type):
+    if request.method == 'POST' and type == 'sale':
+        form = SaleForm(request.POST)
+        if form.is_valid():
+            form.save()
+    elif request.method == 'POST' and type == 'revenue':
+        form = RevenueForm(request.POST)
+        if form.is_valid():
+            form.save()
+    return redirect('transactions')
