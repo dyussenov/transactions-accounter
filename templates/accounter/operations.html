@@ -1,0 +1,18 @@
+{% extends 'accounter/base.html' %}
+
+    {% block content %}
+        <div class="d-flex justify-content-around">
+            <form action="{% url 'transactions' %}" method="post">
+          <h2>Новый приход</h2>
+          {% csrf_token %}
+          {{ revenue_from.as_p }}
+          <button type="submit">Добавить</button>
+        </form>
+        <form action="{% url 'transactions' %}" method="post">
+          <h2>Новая реализация</h2>
+          {% csrf_token %}
+          {{ sale_from.as_p }}
+          <button type="submit">Добавить</button>
+      </form>
+        </div>
+    {% endblock %}

@@ -21,19 +21,40 @@ class SupplierForm(forms.ModelForm):
 
 
 class OperationForm(forms.ModelForm):
-    choices = (
-        ('1', 'Приход'),
-        ('2', 'Реализация')
+    source_choices = (
+        ('1', 'Банк'),
+        ('2', 'Касса')
     )
-    type = forms.ChoiceField(choices=choices)
+    source = forms.ChoiceField(choices=source_choices)
 
     class Meta:
         model = Operation
-        fields = '__all__'
+        exclude = []
+
+
+class RevenueForm(OperationForm):
 
     def __init__(self, *args, **kwargs):
-        super(OperationForm, self).__init__(*args, **kwargs)
-        self.fields['customer'] = forms.ModelChoiceField(queryset=Customer.objects.all())
-        self.fields['customer'].empty_label = 'Покупатель не выбран'
+        super(RevenueForm, self).__init__(*args, **kwargs)
         self.fields['supplier'] = forms.ModelChoiceField(queryset=Supplier.objects.all())
         self.fields['supplier'].empty_label = 'Заказчик не выбран'
+
+    class Meta(OperationForm.Meta):
+        model = Operation
+        exclude = OperationForm.Meta.exclude + ['type', 'customer', ]
+
+
+class SaleForm(OperationForm):
+    type = forms.CharField(
+        widget=forms.HiddenInput(),
+        initial='Приход'
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(SaleForm, self).__init__(*args, **kwargs)
+        self.fields['customer'] = forms.ModelChoiceField(queryset=Customer.objects.all())
+        self.fields['customer'].empty_label = 'Покупатель не выбран'
+
+    class Meta(OperationForm.Meta):
+        model = Operation
+        exclude = OperationForm.Meta.exclude + ['supplier']

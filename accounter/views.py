@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from .forms import *
 from .models import *
 
+
 def home(request):
     context = {
         'supplier_form': SupplierForm,
@@ -24,6 +25,7 @@ def customers(request):
     }
     return render(request, 'accounter/customers.html', context)
 
+
 def suppliers(request):
     if request.method == 'POST':
         form = SupplierForm(request.POST)
@@ -36,3 +38,20 @@ def suppliers(request):
         'suppliers': Supplier.objects.all()
     }
     return render(request, 'accounter/suppliers.html', context)
+
+
+def transactions(request):
+    if request.method == 'POST':
+        form = SaleForm(request.POST)
+        print(form.__dict__)
+        if form.is_valid():
+            print(1488)
+            form.save()
+            return redirect('transactions')
+
+    context = {
+        'revenue_from': RevenueForm,
+        'sale_from': SaleForm,
+        'suppliers': Operation.objects.all()
+    }
+    return render(request, 'accounter/operations.html', context)

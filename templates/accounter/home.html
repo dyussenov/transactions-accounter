@@ -145,12 +145,4 @@
           </tbody>
         </table>
       </div>
-
-
-    <form action="{% url 'home' %}" method="post">
-        <h2>Add Operation</h2>
-        {% csrf_token %}
-        {{ operation_from.as_p }}
-        <button type="submit">Добавить</button>
-    </form>
     {% endblock %}
