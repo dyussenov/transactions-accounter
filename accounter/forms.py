@@ -21,6 +21,12 @@ class SupplierForm(forms.ModelForm):
 
 
 class OperationForm(forms.ModelForm):
+    choices = (
+        ('1', 'Приход'),
+        ('2', 'Реализация')
+    )
+    type = forms.ChoiceField(choices=choices)
+
     class Meta:
         model = Operation
         fields = '__all__'
@@ -28,4 +34,6 @@ class OperationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(OperationForm, self).__init__(*args, **kwargs)
         self.fields['customer'] = forms.ModelChoiceField(queryset=Customer.objects.all())
+        self.fields['customer'].empty_label = 'Покупатель не выбран'
         self.fields['supplier'] = forms.ModelChoiceField(queryset=Supplier.objects.all())
+        self.fields['supplier'].empty_label = 'Заказчик не выбран'

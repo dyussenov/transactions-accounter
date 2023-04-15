@@ -7,6 +7,9 @@ class Supplier(models.Model):
     phone = models.CharField(unique=False, max_length=15)
     email = models.EmailField(max_length=60)
 
+    def __str__(self):
+        return self.name
+
 
 class Customer(models.Model):
     name = models.CharField(unique=True, max_length=60)
@@ -14,6 +17,9 @@ class Customer(models.Model):
     address = models.CharField(unique=False, default='no address', max_length=20)
     phone = models.CharField(unique=False, max_length=15)
     email = models.EmailField(max_length=60)
+
+    def __str__(self):
+        return self.name
 
 
 class Operation(models.Model):
@@ -24,3 +30,6 @@ class Operation(models.Model):
     amount = models.IntegerField()
     customer = models.ForeignKey(to=Customer, on_delete=models.CASCADE)
     supplier = models.ForeignKey(to=Supplier, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
