@@ -22,4 +22,5 @@ class Operation(models.Model):
     type = models.CharField(unique=False, max_length=20)
     source = models.CharField(unique=False, max_length=20)
     amount = models.IntegerField()
-
+    customer = models.ForeignKey(to=Customer, on_delete=models.CASCADE)
+    supplier = models.ForeignKey(to=Supplier, on_delete=models.CASCADE)
