@@ -2,12 +2,16 @@ from django.shortcuts import render, redirect
 
 from .forms import *
 from .models import *
+from .services import add_operation, get_operations_total
 
 
 def home(request):
     context = {
         'supplier_form': SupplierForm,
         'operation_from': OperationForm,
+        'operations': Operation.objects.all(),
+        'total_sales': get_operations_total(True),
+        'total_revenue': get_operations_total(False)
     }
     return render(request, 'accounter/home.html', context)
 
@@ -44,18 +48,12 @@ def transactions(request):
     context = {
         'revenue_from': RevenueForm,
         'sale_from': SaleForm,
-        'suppliers': Operation.objects.all()
+        'operations': Operation.objects.all()
     }
     return render(request, 'accounter/operations.html', context)
 
 
-def add_transaction(request, type):
-    if request.method == 'POST' and type == 'sale':
-        form = SaleForm(request.POST)
-        if form.is_valid():
-            form.save()
-    elif request.method == 'POST' and type == 'revenue':
-        form = RevenueForm(request.POST)
-        if form.is_valid():
-            form.save()
+def add_transaction(request, transaction_type):
+    if request.method == 'POST':
+        add_operation(request, transaction_type)
     return redirect('transactions')

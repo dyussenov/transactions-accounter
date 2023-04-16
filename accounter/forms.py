@@ -21,11 +21,6 @@ class SupplierForm(forms.ModelForm):
 
 
 class OperationForm(forms.ModelForm):
-    source_choices = (
-        ('1', 'Банк'),
-        ('2', 'Касса')
-    )
-    source = forms.ChoiceField(choices=source_choices)
 
     class Meta:
         model = Operation
@@ -33,9 +28,10 @@ class OperationForm(forms.ModelForm):
 
 
 class RevenueForm(OperationForm):
-    type = forms.CharField(
+    is_sale = forms.BooleanField(
+        required=False,
         widget=forms.HiddenInput(),
-        initial='Реализация'
+        initial=False
     )
 
     def __init__(self, *args, **kwargs):
@@ -49,9 +45,9 @@ class RevenueForm(OperationForm):
 
 
 class SaleForm(OperationForm):
-    type = forms.CharField(
+    is_sale = forms.BooleanField(
         widget=forms.HiddenInput(),
-        initial='Приход'
+        initial=True
     )
 
     def __init__(self, *args, **kwargs):
