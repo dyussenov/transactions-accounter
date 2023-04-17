@@ -4,7 +4,7 @@
 
     {% block content %}
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Dashboard</h1>
+        <h1 class="h2">Графики</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -17,8 +17,30 @@
         </div>
       </div>
 
-      <canvas class="my-4 w-100" id="chartpy" width="900" height="380"></canvas>
-
+      <canvas class="my-4 w-100" id="chart" width="900" height="380"></canvas>
+<script>
+    let ctx = document.getElementById("chart").getContext("2d");
+let chart = new Chart(ctx, {
+  type: "bar",
+  data: {
+   labels: ["Всего Приходы", "Всего Реализации", "Приходы, Апрель", "Реализации, Апрель"],
+   datasets: [
+    {
+      label: "Сумма (KZT)",
+      backgroundColor: "#79AEC8",
+      borderColor: "#417690",
+      data: [{{ total_revenue }}, {{ total_sales }}, 2700, 2200]
+    }
+   ]
+  },
+  options: {
+   title: {
+    text: "Gross Volume in 2020",
+    display: true
+   }
+  }
+});
+</script>
       <h2>Сводка</h2>
 <div class="row">
   <div class="col-sm">
