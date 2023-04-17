@@ -11,7 +11,11 @@ def home(request):
         'operation_from': OperationForm,
         'operations': Operation.objects.all(),
         'total_sales': get_operations_total(True),
-        'total_revenue': get_operations_total(False)
+        'total_revenue': get_operations_total(False),
+        'sales_last_month': get_operations_total(True, True),
+        'revenue_last_month': get_operations_total(False, True),
+        'profit': get_operations_total(True, True) - get_operations_total(False, True)
+
     }
     return render(request, 'accounter/home.html', context)
 

@@ -29,7 +29,7 @@ let chart = new Chart(ctx, {
       label: "Сумма (KZT)",
       backgroundColor: "#79AEC8",
       borderColor: "#417690",
-      data: [{{ total_revenue }}, {{ total_sales }}, 2700, 2200]
+      data: [{{ total_revenue }}, {{ total_sales }}, {{ revenue_last_month }}, {{ sales_last_month }}]
     }
    ]
   },
@@ -63,7 +63,7 @@ let chart = new Chart(ctx, {
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Приходы, Апрель</h5>
-        <p class="card-text">Placeholder</p>
+        <p class="card-text">{{ revenue_last_month }}</p>
       </div>
     </div>
   </div>
@@ -71,7 +71,7 @@ let chart = new Chart(ctx, {
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Реализации, Апрель</h5>
-        <p class="card-text">Placeholder</p>
+        <p class="card-text">{{ sales_last_month }}</p>
       </div>
     </div>
   </div>
@@ -79,7 +79,7 @@ let chart = new Chart(ctx, {
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Прибыль, Апрель</h5>
-        <p class="card-text">Placeholder</p>
+        <p class="card-text">{{ profit }}</p>
       </div>
     </div>
   </div>
