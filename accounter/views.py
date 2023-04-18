@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 
 from .forms import *
 from .models import *
-from .services import add_operation, get_operations_total
+from .services import add_operation, get_operations_total, get_operations_by_source
 
 import io
 from django.http import FileResponse
@@ -35,9 +35,13 @@ def home(request):
         'total_revenue': get_operations_total(False),
         'sales_last_month': get_operations_total(True, True),
         'revenue_last_month': get_operations_total(False, True),
-        'profit': get_operations_total(True, True) - get_operations_total(False, True)
-
+        'profit': get_operations_total(True, True) - get_operations_total(False, True),
+        'total_sales_bank': get_operations_by_source(True, True),
+        'total_sales_cash': get_operations_by_source(True, False),
+        'total_revenue_bank': get_operations_by_source(False, True),
+        'total_revenue_cash': get_operations_by_source(False, True),
     }
+    #за текущий день, банк/касса/приход/расход + нарастающий
     return render(request, 'accounter/home.html', context)
 
 
