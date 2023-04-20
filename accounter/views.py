@@ -2,28 +2,19 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render, redirect
 
+from django.http import HttpResponse
 from .forms import *
 from .models import *
 from .services import *
 
-import io
 from django.http import FileResponse
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
-def some_view(request, type):
-    buffer = io.BytesIO()
-    p = canvas.Canvas(buffer, pagesize=A4, bottomup=0)
-    data = Operation.objects.all().values()
-    for line in data:
-        for k, v in line.items():
-            print(v, end=',')
-        print()
 
-    # Close the PDF object cleanly, and we're done.
-    p.showPage()
-    p.save()
-    buffer.seek(0)
-    return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+
+def some_view(request, type):
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment;filename="some_file_name.xlsx"'
+    response.write(generate_report().getvalue())
+    return response
 
 
 def home(request):
@@ -42,7 +33,7 @@ def home(request):
         'total_revenue_cash': get_today_operations(False, True),
     }
     context.update(get_charts_data())
-    #за текущий день, банк/касса/приход/расход + нарастающий
+    # за текущий день, банк/касса/приход/расход + нарастающий
     return render(request, 'accounter/home.html', context)
 
 
