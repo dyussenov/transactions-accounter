@@ -40,12 +40,50 @@ def get_operations_by_source(operation_type, is_bank, is_last_month=False):
         else:
             return res
 
+
 def get_today_operations(operation_type, is_bank):
-    today = datetime.now().date()
+    today = datetime.now().day
+    print(today)
     res = Operation.objects.filter(is_sale=operation_type, is_bank=is_bank,
-                                   time=today).aggregate(
+                                   time__day=today).aggregate(
         Sum('amount'))['amount__sum']
     if res is None:
         return 0
     else:
         return res
+
+
+def get_charts_data():
+    request = Operation.objects.all()
+    today = datetime.now().date()
+    data = {
+        'today': {
+            'sales': {
+                'total':  Operation.objects.filter(
+                    is_sale=True,
+                    time=today
+                ).aggregate(Sum('amount'))['amount__sum'],
+                'bank': '228',
+                'cash': '322',
+            },
+            'revenue': {
+                'total': '1337',
+                'bank': '228',
+                'cash': '322',
+            }
+        },
+        'month': {
+            'sales': {
+                'total': request.filter(is_sale=True).aggregate(Sum('amount'))['amount__sum'],
+                'bank': request.filter(is_sale=True, is_bank=True).aggregate(Sum('amount'))['amount__sum'],
+                'cash': request.filter(is_sale=True, is_bank=False).aggregate(Sum('amount'))['amount__sum'],
+            },
+            'revenue': {
+                'total': request.filter(is_sale=False).aggregate(Sum('amount'))['amount__sum'],
+                'bank': request.filter(is_sale=False, is_bank=True).aggregate(Sum('amount'))['amount__sum'],
+                'cash': request.filter(is_sale=False, is_bank=False).aggregate(Sum('amount'))['amount__sum'],
+            }
+        }
+    }
+    print(data['today'])
+    return data

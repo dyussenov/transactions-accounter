@@ -20,16 +20,68 @@
       <canvas class="my-4 w-100" id="chart" width="900" height="380"></canvas>
 <script>
     let ctx = document.getElementById("chart").getContext("2d");
-let chart = new Chart(ctx, {
+    let chart = new Chart(ctx, {
   type: "bar",
   data: {
-   labels: ["Всего Приходы", "Всего Реализации", "Приходы, Апрель", "Реализации, Апрель"],
+   labels: [
+    "Всего Приходы, Сегодня",
+    "Всего Реализации, сегодня",
+    "Приходы Банк, Сегодня",
+    "Приходы Касса, Сегодня",
+    "Реализации Банк, Сегодня",
+    "Реализации Касса, Сегодня",
+    ],
    datasets: [
     {
       label: "Сумма (KZT)",
       backgroundColor: "#79AEC8",
       borderColor: "#417690",
-      data: [{{ total_revenue }}, {{ total_sales }}, {{ revenue_last_month }}, {{ sales_last_month }}]
+      data: [
+        {{ today.revenue.total }},
+        {{ today.sales.total }},
+        {{ today.revenue.bank }},
+        {{ today.revenue.cash }},
+        {{ today.sales.bank }},
+        {{ today.sales.cash }},
+      ]
+    }
+   ]
+  },
+  options: {
+   title: {
+    text: "Gross Volume in 2020",
+    display: true
+   }
+  }
+});
+</script>
+<canvas class="my-4 w-100" id="chart2" width="900" height="380"></canvas>
+<script>
+    let ctx2 = document.getElementById("chart2").getContext("2d");
+    let chart2 = new Chart(ctx2, {
+  type: "bar",
+  data: {
+   labels: [
+    "Всего Приходы, Апрель",
+    "Всего Реализации, Апрель",
+    "Приходы Банк, Апрель",
+    "Приходы Касса, Апрель",
+    "Реализации Банк, Апрель",
+    "Реализации Касса, Апрель",
+    ],
+   datasets: [
+    {
+      label: "Сумма (KZT)",
+      backgroundColor: "#79AEC8",
+      borderColor: "#417690",
+      data: [
+        {{ month.revenue.total }},
+        {{ month.sales.total }},
+        {{ month.revenue.bank }},
+        {{ month.revenue.cash }},
+        {{ month.sales.bank }},
+        {{ month.sales.cash }},
+      ]
     }
    ]
   },

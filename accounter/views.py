@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 
 from .forms import *
 from .models import *
-from .services import add_operation, get_operations_total, get_operations_by_source, get_today_operations
+from .services import *
 
 import io
 from django.http import FileResponse
@@ -41,6 +41,7 @@ def home(request):
         'total_revenue_bank': get_operations_by_source(False, True),
         'total_revenue_cash': get_today_operations(False, True),
     }
+    context.update(get_charts_data())
     #за текущий день, банк/касса/приход/расход + нарастающий
     return render(request, 'accounter/home.html', context)
 
