@@ -42,6 +42,9 @@ def add_operation(request, transaction_type):
         form = SaleForm(request.POST)
         if form.is_valid():
             form.save()
+        else:
+            form_errors = form.errors.as_data()
+            print(form_errors)
     elif transaction_type == 'revenue':
         form = RevenueForm(request.POST)
         if form.is_valid():

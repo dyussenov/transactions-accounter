@@ -3,11 +3,15 @@ from .models import Customer, Supplier, Operation, Item, Contract
 
 
 class ContractForm(forms.ModelForm):
-
     contract_file = forms.FileField()
+    contract_file.label = 'Файл'
     class Meta:
         model = Contract
         fields = '__all__'
+        labels = {
+            'name': 'Наименование',
+        }
+
 
 class CustomerForm(forms.ModelForm):
     choices = (
@@ -21,6 +25,7 @@ class CustomerForm(forms.ModelForm):
     )
     type = forms.ChoiceField(choices=choices)
     type.label = 'Тип'
+
     class Meta:
         model = Customer
         fields = '__all__'
@@ -80,7 +85,7 @@ class SaleForm(OperationForm):
     )
     is_payment = forms.BooleanField(
         widget=forms.HiddenInput(),
-        initial=False
+        initial=True
     )
 
     def __init__(self, *args, **kwargs):

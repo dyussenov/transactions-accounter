@@ -1,84 +1,92 @@
 {% extends 'accounter/base.html' %}
 
-    {% block content %}
-        <div class="d-flex justify-content-around">
-            <form action="{% url 'add_transaction' 'revenue' %}" method="post">
-          <h3>Кредиторская задолженность поставщикам/подрядчикам</h3>
-          {% csrf_token %}
-          {{ revenue_from.as_p }}
-          <button type="submit">Добавить</button>
-        </form>
-        <form action="{% url 'add_transaction' 'sale' %}" method="post">
-          <h3>Дебиторская задолженность покупателю</h3>
-          {% csrf_token %}
-          {{ sale_from.as_p }}
-          <button type="submit">Добавить</button>
-      </form>
-        </div>
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Расчетные операции</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-          <div class="btn-group me-2">
+{% block content %}
+<div class="d-flex justify-content-around">
+    <form action="{% url 'add_transaction' 'revenue' %}" method="post">
+        <h3>Кредиторская задолженность поставщикам/подрядчикам</h3>
+        {% csrf_token %}
+        {{ revenue_from.as_p }}
+        <button type="submit">Добавить</button>
+    </form>
+    <form action="{% url 'add_transaction' 'sale' %}" method="post">
+        <h3>Дебиторская задолженность покупателю</h3>
+        {% csrf_token %}
+        {{ form.errors }}
+        {{ sale_from.as_p }}
+        <button type="submit">Добавить</button>
+    </form>
+</div>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Расчетные операции</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
             <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-          </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar" class="align-text-bottom"></span>
-            This week
-          </button>
         </div>
-      </div>
-    <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th scope="col">id</th>
-              <th scope="col">Наименование</th>
-              <th scope="col">Товар/Услуга</th>
-              <th scope="col">Время</th>
-                <th scope="col">Контрагент</th>
-              <th scope="col">Тип</th>
-              <th scope="col">Сумма</th>
-              <th scope="col">Источник</th>
-              <th scope="col">Договор</th>
+        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+            <span data-feather="calendar" class="align-text-bottom"></span>
+            Эта неделя
+        </button>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Наименование</th>
+            <th scope="col">Товар/Услуга</th>
+            <th scope="col">Время</th>
+            <th scope="col">Контрагент</th>
+            <th scope="col">Тип</th>
+            <th scope="col">Сумма</th>
+            <th scope="col">Источник</th>
+            <th scope="col">Договор</th>
+            <th scope="col">Счет</th>
 
 
-            </tr>
-          </thead>
-          <tbody>
-          {% for operation in operations %}
-          <tr>
-              <td>{{ operation.id }}</td>
-              <td>{{ operation.name }}</td>
-              <td>{{ operation.item }}</td>
-              <td>{{ operation.time }}</td>
-              <td>{{ operation.customer.name }}{{ operation.supplier.name }}</td>
-              {% if operation.is_sale %}
-                <td><h6><i class="bi bi-cart-plus"></i> Реализация</h6></td>
-                <td>{{ operation.amount }}</td>
-              {% else %}
-                <td><h6><i class="bi bi-cart-dash"></i> Приход</h6></td>
-                <td>{{ operation.amount }}</td>
-              {% endif %}
-              <td>
-                  {% if operation.is_bank %}
-                    Банк
-                  {% else %}
-                    Касса
-                  {% endif %}
-              </td>
-              <td>
-                  {% if operation.contract %}
-                    <a href="{% url 'download_file' operation.pk %}">{{ operation.contract }}</a>
-                  {% endif %}
-              </td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for operation in operations %}
+        <tr>
+            <td>{{ operation.id }}</td>
+            <td>{{ operation.name }}</td>
+            <td>{{ operation.item }}</td>
+            <td>{{ operation.time }}</td>
+            <td>{{ operation.customer.name }}{{ operation.supplier.name }}</td>
+            {% if operation.is_sale %}
+            <td><h6><i class="bi bi-cart-plus"></i> Кредиторская</h6></td>
+            <td>{{ operation.amount }}</td>
+            {% else %}
+            <td><h6><i class="bi bi-cart-dash"></i> Дебиторская</h6></td>
+            <td>{{ operation.amount }}</td>
+            {% endif %}
+            <td>
+                {% if operation.is_bank %}
+                Банк
+                {% else %}
+                Касса
+                {% endif %}
+            </td>
+            <td>
+                {% if operation.contract %}
+                <a href="{% url 'download_file' operation.pk %}">{{ operation.contract }}</a>
+                {% endif %}
+            </td>
+            <td>
+                {% if operation.is_sale %}
+                <a href="{% url 'invoice' operation.pk %}">
+                    <i class="bi bi-box-arrow-down"></i>
+                </a>
+                {% endif %}
+            </td>
 
-
-            </tr>
+        </tr>
 
         {% endfor %}
 
-          </tbody>
-        </table>
-      </div>
-    {% endblock %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
