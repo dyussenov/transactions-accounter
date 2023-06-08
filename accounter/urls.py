@@ -9,4 +9,6 @@ urlpatterns = [
     path('transactions/<str:transaction_type>/', add_transaction, name='add_transaction'),
     path('reports/<str:type>/', some_view, name='reports'),
     path('items/', items, name='items'),
+    path('contracts/', create_contract, name='contracts'),
+    path('contracts/<int:pk>/', download_file, name='download_file'),
 ]

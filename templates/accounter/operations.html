@@ -34,11 +34,13 @@
             <tr>
               <th scope="col">id</th>
               <th scope="col">Наименование</th>
+              <th scope="col">Товар/Услуга</th>
               <th scope="col">Время</th>
                 <th scope="col">Контрагент</th>
               <th scope="col">Тип</th>
               <th scope="col">Сумма</th>
               <th scope="col">Источник</th>
+              <th scope="col">Договор</th>
 
 
             </tr>
@@ -48,20 +50,26 @@
           <tr>
               <td>{{ operation.id }}</td>
               <td>{{ operation.name }}</td>
+              <td>{{ operation.item }}</td>
               <td>{{ operation.time }}</td>
               <td>{{ operation.customer.name }}{{ operation.supplier.name }}</td>
               {% if operation.is_sale %}
-                <td style="background-color: #31e8c6">Реализация</td>
-                <td style="background-color: #31e8c6">{{ operation.amount }}</td>
+                <td><h6><i class="bi bi-cart-plus"></i> Реализация</h6></td>
+                <td>{{ operation.amount }}</td>
               {% else %}
-                <td style="background-color: #ba0016">Приход</td>
-                <td style="background-color: #ba0016">{{ operation.amount }}</td>
+                <td><h6><i class="bi bi-cart-dash"></i> Приход</h6></td>
+                <td>{{ operation.amount }}</td>
               {% endif %}
               <td>
                   {% if operation.is_bank %}
                     Банк
                   {% else %}
                     Касса
+                  {% endif %}
+              </td>
+              <td>
+                  {% if operation.contract %}
+                    <a href="{% url 'download_file' operation.pk %}">{{ operation.contract }}</a>
                   {% endif %}
               </td>
 

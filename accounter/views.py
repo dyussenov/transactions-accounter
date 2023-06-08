@@ -1,6 +1,6 @@
 import json
 from django.core.serializers.json import DjangoJSONEncoder
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from django.http import HttpResponse
 from .forms import *
@@ -92,3 +92,20 @@ def items(request):
         'items': Item.objects.all()
     }
     return render(request, 'accounter/items.html', context)
+
+
+def create_contract(request):
+    if request.method == 'POST':
+        form = ContractForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('contracts')
+    else:
+        form = ContractForm()
+    return render(request, 'accounter/contracts.html', {'form': form})
+
+def download_file(request, pk):
+    operation = get_object_or_404(Operation, pk=pk)
+    file = operation.contract.contract_file.path
+    response = FileResponse(open(file, 'rb'))
+    return response

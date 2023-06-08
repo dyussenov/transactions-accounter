@@ -1,0 +1,12 @@
+{% extends 'accounter/base.html' %}
+
+{% block content %}
+
+    <form action="{% url 'contracts' %}" method="post" enctype="multipart/form-data">
+        <h2>Добавить Контракт</h2>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Добавить</button>
+    </form>
+
+{% endblock %}

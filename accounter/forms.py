@@ -1,25 +1,31 @@
 from django import forms
-from .models import Customer, Supplier, Operation, Item
+from .models import Customer, Supplier, Operation, Item, Contract
 
+
+class ContractForm(forms.ModelForm):
+
+    contract_file = forms.FileField()
+    class Meta:
+        model = Contract
+        fields = '__all__'
 
 class CustomerForm(forms.ModelForm):
     choices = (
-        ('1', 'Физ. лицо/ИП'),
-        ('2', 'ТОО'),
-        ('3', 'АО, страховая компания'),
-        ('4', 'НАО "Правительство для граждан"'),
-        ('5', 'Банк'),
-        ('6', 'Иностранная фирма'),
-        ('7', 'Управление гос. доходов'),
+        ('Физ. лицо/ИП', 'Физ. лицо/ИП'),
+        ('ТОО', 'ТОО'),
+        ('АО, страховая компания', 'АО, страховая компания'),
+        ('НАО "Правительство для граждан"', 'НАО "Правительство для граждан"'),
+        ('Банк', 'Банк'),
+        ('Иностранная фирма', 'Иностранная фирма'),
+        ('Управление гос. доходов', 'Управление гос. доходов'),
     )
     type = forms.ChoiceField(choices=choices)
-
+    type.label = 'Тип'
     class Meta:
         model = Customer
         fields = '__all__'
         labels = {
             'name': 'Наименование',
-            'type': 'Тип',
             'address': 'Адрес',
             'phone': 'Телефон',
             'email': 'Почта',
@@ -61,6 +67,7 @@ class RevenueForm(OperationForm):
         self.fields['supplier'].empty_label = 'Поставщик не выбран'
         self.fields['item'].empty_label = 'Товар не выбран'
         self.fields['supplier'].label = 'Поставщик'
+
     class Meta(OperationForm.Meta):
         model = Operation
         exclude = OperationForm.Meta.exclude + ['customer', ]
@@ -87,8 +94,8 @@ class SaleForm(OperationForm):
         model = Operation
         exclude = OperationForm.Meta.exclude + ['supplier']
 
-class ItemForm(forms.ModelForm):
 
+class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
         exclude = []
