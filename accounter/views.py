@@ -78,3 +78,17 @@ def add_transaction(request, transaction_type):
     if request.method == 'POST':
         add_operation(request, transaction_type)
     return redirect('transactions')
+
+
+def items(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('items')
+
+    context = {
+        'item_form': ItemForm,
+        'items': Item.objects.all()
+    }
+    return render(request, 'accounter/items.html', context)

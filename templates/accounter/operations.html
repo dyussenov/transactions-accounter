@@ -3,20 +3,20 @@
     {% block content %}
         <div class="d-flex justify-content-around">
             <form action="{% url 'add_transaction' 'revenue' %}" method="post">
-          <h2>Новый приход</h2>
+          <h3>Кредиторская задолженность поставщикам/подрядчикам</h3>
           {% csrf_token %}
           {{ revenue_from.as_p }}
           <button type="submit">Добавить</button>
         </form>
         <form action="{% url 'add_transaction' 'sale' %}" method="post">
-          <h2>Новая реализация</h2>
+          <h3>Дебиторская задолженность покупателю</h3>
           {% csrf_token %}
           {{ sale_from.as_p }}
           <button type="submit">Добавить</button>
       </form>
         </div>
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Кассовые операции</h1>
+        <h1 class="h2">Расчетные операции</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
