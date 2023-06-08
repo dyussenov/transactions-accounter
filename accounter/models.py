@@ -52,9 +52,14 @@ class Operation(models.Model):
     contract = models.ForeignKey(to=Contract, on_delete=models.CASCADE, null=True, blank=True)
     amount = models.IntegerField()
     price = models.IntegerField(default=0)
+    total = models.IntegerField(default=0, null=True)
     item = models.ForeignKey(to=Item, on_delete=models.CASCADE, null=True, blank=True)
     customer = models.ForeignKey(to=Customer, on_delete=models.CASCADE, null=True, blank=True)
     supplier = models.ForeignKey(to=Supplier, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.total = self.price * self.amount
+        super().save(*args, **kwargs)

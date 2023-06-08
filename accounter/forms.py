@@ -5,6 +5,7 @@ from .models import Customer, Supplier, Operation, Item, Contract
 class ContractForm(forms.ModelForm):
     contract_file = forms.FileField()
     contract_file.label = 'Файл'
+
     class Meta:
         model = Contract
         fields = '__all__'
@@ -42,6 +43,12 @@ class SupplierForm(forms.ModelForm):
     class Meta:
         model = Supplier
         fields = '__all__'
+        labels = {
+            'name': 'Наименование',
+            'address': 'Адрес',
+            'phone': 'Телефон',
+            'email': 'Почта',
+        }
 
 
 class OperationForm(forms.ModelForm):
@@ -51,12 +58,13 @@ class OperationForm(forms.ModelForm):
             'name': 'Наименование',
             'is_payment': 'Подлежит оплате',
             'is_bank': 'ТБС',
+            'contract': 'Договор',
             'amount': 'Количество',
             'price': 'Цена',
             'item': 'Товар',
             'supplier': 'Поставщик',
         }
-        exclude = []
+        exclude = ['total']
 
 
 class RevenueForm(OperationForm):
@@ -104,3 +112,8 @@ class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
         exclude = []
+        labels = {
+            'name': 'Наименование',
+            'description': 'Описание',
+
+        }

@@ -39,12 +39,12 @@
             <th scope="col">Время</th>
             <th scope="col">Контрагент</th>
             <th scope="col">Тип</th>
+            <th scope="col">Количество</th>
+            <th scope="col">Цена</th>
             <th scope="col">Сумма</th>
             <th scope="col">Источник</th>
             <th scope="col">Договор</th>
             <th scope="col">Счет</th>
-
-
         </tr>
         </thead>
         <tbody>
@@ -57,11 +57,21 @@
             <td>{{ operation.customer.name }}{{ operation.supplier.name }}</td>
             {% if operation.is_sale %}
             <td><h6><i class="bi bi-cart-plus"></i> Кредиторская</h6></td>
-            <td>{{ operation.amount }}</td>
             {% else %}
-            <td><h6><i class="bi bi-cart-dash"></i> Дебиторская</h6></td>
-            <td>{{ operation.amount }}</td>
+            <td>
+                <h6>
+                    <i class="bi bi-cart-dash"></i>
+                    Дебиторская
+                    {% if operation.is_payment %}
+                        - на оплату
+                    {% endif %}
+                </h6>
+            </td>
             {% endif %}
+            <td>{{ operation.amount }}</td>
+            <td>{{ operation.price }}</td>
+            <td>{{ operation.total }}</td>
+
             <td>
                 {% if operation.is_bank %}
                 Банк
