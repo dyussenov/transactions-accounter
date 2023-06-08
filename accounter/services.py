@@ -1,40 +1,7 @@
-import io
-import xlsxwriter
 from datetime import datetime
 from django.db.models import *
 
-from .models import Operation
 from .forms import *
-
-
-def generate_report(report_type="today"):
-    today = datetime.now().date()
-    #operations = Operation.objects.filter(time__date=today)
-    operations = Operation.objects.all()
-    output = io.BytesIO()
-    workbook = xlsxwriter.Workbook(output)
-    worksheet = workbook.add_worksheet()
-    worksheet.write(0, 0, f'Отчет по операциям за {today}')
-    worksheet.write(1, 0, f'id')
-    worksheet.write(1, 1, f'Наименование')
-    worksheet.write(1, 2, f'Время')
-    worksheet.write(1, 3, f'Контрагент')
-    worksheet.write(1, 4, f'Тип')
-    worksheet.write(1, 5, f'Сумма')
-    worksheet.write(1, 6, f'Источник')
-    line = 2
-    for operation in operations:
-        worksheet.write(line, 0, operation.id)
-        worksheet.write(line, 1, operation.name)
-        worksheet.write(line, 2, str(operation.time))
-        worksheet.write(line, 3, 'unknown')
-        worksheet.write(line, 4, operation.is_sale)
-        worksheet.write(line, 5, operation.is_bank)
-        worksheet.write(line, 6, operation.amount)
-        line+=1
-    
-    workbook.close()
-    return output
 
 
 def add_operation(request, transaction_type):
@@ -42,9 +9,6 @@ def add_operation(request, transaction_type):
         form = SaleForm(request.POST)
         if form.is_valid():
             form.save()
-        else:
-            form_errors = form.errors.as_data()
-            print(form_errors)
     elif transaction_type == 'revenue':
         form = RevenueForm(request.POST)
         if form.is_valid():
@@ -93,38 +57,47 @@ def get_charts_data():
     data = {
         'today': {
             'sales': {
-                'total': int(Operation.objects.filter(is_sale=True, time__date=today).aggregate(Sum('amount'))[
-                                 'amount__sum'] or 0),
+                'total': int(Operation.objects.filter(is_sale=True, time__date=today).aggregate(Sum('total'))[
+                                 'total__sum'] or 0),
                 'bank': int(
-                    Operation.objects.filter(is_sale=True, is_bank=True, time__date=today).aggregate(Sum('amount'))[
-                        'amount__sum'] or 0),
+                    Operation.objects.filter(is_sale=True, is_bank=True, time__date=today).aggregate(Sum('total'))[
+                        'total__sum'] or 0),
                 'cash': int(
-                    Operation.objects.filter(is_sale=True, is_bank=False, time__date=today).aggregate(Sum('amount'))[
-                        'amount__sum'] or 0),
+                    Operation.objects.filter(is_sale=True, is_bank=False, time__date=today).aggregate(Sum('total'))[
+                        'total__sum'] or 0),
             },
             'revenue': {
-                'total': int(Operation.objects.filter(is_sale=False, time__date=today).aggregate(Sum('amount'))[
-                                 'amount__sum'] or 0),
+                'total': int(Operation.objects.filter(is_sale=False, time__date=today).aggregate(Sum('total'))[
+                                 'total__sum'] or 0),
                 'bank': int(
-                    Operation.objects.filter(is_sale=False, is_bank=True, time__date=today).aggregate(Sum('amount'))[
-                        'amount__sum'] or 0),
+                    Operation.objects.filter(is_sale=False, is_bank=True, time__date=today).aggregate(Sum('total'))[
+                        'total__sum'] or 0),
                 'cash': int(
-                    Operation.objects.filter(is_sale=False, is_bank=False, time__date=today).aggregate(Sum('amount'))[
-                        'amount__sum'] or 0),
+                    Operation.objects.filter(is_sale=False, is_bank=False, time__date=today).aggregate(Sum('total'))[
+                        'total__sum'] or 0),
             }
         },
         'month': {
             'sales': {
-                'total': request.filter(is_sale=True).aggregate(Sum('amount'))['amount__sum'],
-                'bank': request.filter(is_sale=True, is_bank=True).aggregate(Sum('amount'))['amount__sum'],
-                'cash': request.filter(is_sale=True, is_bank=False).aggregate(Sum('amount'))['amount__sum'],
+                'total': int(Operation.objects.filter(is_sale=True).aggregate(Sum('total'))[
+                                 'total__sum'] or 0),
+                'bank': int(
+                    Operation.objects.filter(is_sale=True, is_bank=True).aggregate(Sum('total'))[
+                        'total__sum'] or 0),
+                'cash': int(
+                    Operation.objects.filter(is_sale=True, is_bank=False).aggregate(Sum('total'))[
+                        'total__sum'] or 0),
             },
             'revenue': {
-                'total': request.filter(is_sale=False).aggregate(Sum('amount'))['amount__sum'],
-                'bank': request.filter(is_sale=False, is_bank=True).aggregate(Sum('amount'))['amount__sum'],
-                'cash': request.filter(is_sale=False, is_bank=False).aggregate(Sum('amount'))['amount__sum'],
+                'total': int(Operation.objects.filter(is_sale=False).aggregate(Sum('total'))[
+                                 'total__sum'] or 0),
+                'bank': int(
+                    Operation.objects.filter(is_sale=False, is_bank=True).aggregate(Sum('total'))[
+                        'total__sum'] or 0),
+                'cash': int(
+                    Operation.objects.filter(is_sale=False, is_bank=False).aggregate(Sum('total'))[
+                        'total__sum'] or 0),
             }
         }
     }
-    print(data['today'])
     return data

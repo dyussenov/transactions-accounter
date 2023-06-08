@@ -1,24 +1,14 @@
-import json
+
 import os
-from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render, redirect, get_object_or_404
 
-from django.http import HttpResponse
-from .forms import *
-from .models import *
+
 from .services import *
 
 from django.http import FileResponse
 from django.http import HttpResponse
 from openpyxl import load_workbook
 from io import BytesIO
-
-def some_view(request, type):
-    response = HttpResponse(content_type='application/vnd.ms-excel')
-    response['Content-Disposition'] = 'attachment;filename="some_file_name.xlsx"'
-    response.write(generate_report().getvalue())
-    return response
-
 
 def home(request):
     context = {

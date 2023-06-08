@@ -26,7 +26,7 @@ class Item(models.Model):
 class Customer(models.Model):
     name = models.CharField(unique=True, max_length=60)
     type = models.CharField(unique=False, max_length=20)
-    address = models.CharField(unique=False, default='no address', max_length=20)
+    address = models.CharField(unique=False, default='no address', max_length=55)
     phone = models.CharField(unique=False, max_length=15)
     email = models.EmailField(max_length=60)
     bin = models.CharField(max_length=25, default='0000')
