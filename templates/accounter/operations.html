@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="d-flex justify-content-around">
-    <form action="{% url 'add_transaction' 'revenue' %}" method="post">
+    <form action="{% url 'add_transaction' 'revenue' %}" method="post" enctype="multipart/form-data">
         <h3>Кредиторская задолженность поставщикам/подрядчикам</h3>
         {% csrf_token %}
         {{ revenue_from.as_p }}
@@ -56,12 +56,12 @@
             <td>{{ operation.time }}</td>
             <td>{{ operation.customer.name }}{{ operation.supplier.name }}</td>
             {% if operation.is_sale %}
-            <td><h6><i class="bi bi-cart-plus"></i> Кредиторская</h6></td>
+            <td><h6><i class="bi bi-cart-plus"></i> Дебиторская</h6></td>
             {% else %}
             <td>
                 <h6>
                     <i class="bi bi-cart-dash"></i>
-                    Дебиторская
+                     Кредиторская
                     {% if operation.is_payment %}
                         - на оплату
                     {% endif %}
@@ -87,6 +87,10 @@
             <td>
                 {% if operation.is_sale %}
                 <a href="{% url 'invoice' operation.pk %}">
+                    <i class="bi bi-box-arrow-down"></i>
+                </a>
+                {% else %}
+                <a href="{% url 'download_invoice' operation.pk %}">
                     <i class="bi bi-box-arrow-down"></i>
                 </a>
                 {% endif %}

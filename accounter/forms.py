@@ -95,6 +95,9 @@ class SaleForm(OperationForm):
         widget=forms.HiddenInput(),
         initial=True
     )
+    contract_file = forms.CharField(
+        widget=forms.HiddenInput(attrs={'value': None}),
+    )
 
     def __init__(self, *args, **kwargs):
         super(SaleForm, self).__init__(*args, **kwargs)

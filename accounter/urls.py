@@ -11,4 +11,5 @@ urlpatterns = [
     path('contracts/', create_contract, name='contracts'),
     path('contracts/<int:pk>/', download_file, name='download_file'),
     path('invoice/<int:pk>/', generate_invoice, name='invoice'),
+    path('dinvoice/<int:pk>/', download_invoice, name='download_invoice'),
 ]

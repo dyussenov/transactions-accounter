@@ -104,6 +104,11 @@ def download_file(request, pk):
     response = FileResponse(open(file, 'rb'))
     return response
 
+def download_invoice(request, pk):
+    operation = get_object_or_404(Operation, pk=pk)
+    file = operation.contract_file.path
+    response = FileResponse(open(file, 'rb'))
+    return response
 
 def generate_invoice(request, pk):
     operation = get_object_or_404(Operation, pk=pk)

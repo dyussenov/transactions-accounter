@@ -10,9 +10,12 @@ def add_operation(request, transaction_type):
         if form.is_valid():
             form.save()
     elif transaction_type == 'revenue':
-        form = RevenueForm(request.POST)
+        form = RevenueForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+        else:
+            form_errors = form.errors.as_data()
+            print(form_errors)
 
 
 def get_operations_total(operation_type, is_last_month=False):

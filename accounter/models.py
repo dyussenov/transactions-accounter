@@ -48,6 +48,7 @@ class Operation(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     is_sale = models.BooleanField(unique=False, default=False)
     is_payment = models.BooleanField(default=False)
+    contract_file = models.FileField(upload_to='invoices/', null=True)
     is_bank = models.BooleanField(unique=False, default=False)
     contract = models.ForeignKey(to=Contract, on_delete=models.CASCADE, null=True, blank=True)
     amount = models.IntegerField()
